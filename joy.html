@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JoyNest - Relax and Smile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌼 JoyNest</h1>
+        <p>Welcome to your stress-free zone. Take a deep breath and enjoy!</p>
+
+        <div class="section">
+            <h2>🧘 Breathe with Me</h2>
+            <div class="breath-circle" id="breathCircle">Inhale</div>
+        </div>
+
+        <div class="section">
+            <h2>🎶 Relaxing Sound</h2>
+            <button onclick="playSound()">Play Nature Sound</button>
+            <audio id="natureSound" loop>
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <div class="section">
+            <h2>🌞 Positive Affirmation</h2>
+            <p id="affirmation">You are enough just as you are.</p>
+            <button onclick="newAffirmation()">Show Another</button>
+        </div>
+
+        <div class="section">
+            <h2>🎨 Doodle Something</h2>
+            <canvas id="canvas" width="300" height="200"></canvas>
+            <button onclick="clearCanvas()">Clear</button>
+        </div>
+
+        <div class="section">
+            <h2>📒 Quick Gratitude</h2>
+            <textarea id="gratitude" placeholder="I'm grateful for..."></textarea>
+            <button onclick="saveGratitude()">Save</button>
+            <p id="savedMessage"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f2f7ff;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 30px;
+}
+
+h1 {
+    color: #4a90e2;
+}
+
+.section {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+button {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #357ab7;
+}
+
+.breath-circle {
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+    border-radius: 50%;
+    background-color: #cfe8fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    animation: breathing 6s infinite;
+}
+
+@keyframes breathing {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); background-color: #b2ddfa; }
+    100% { transform: scale(1); }
+}
+
+textarea {
+    width: 90%;
+    height: 60px;
+    padding: 10px;
+    border-radius: 5px;
+    resize: none;
+}
+
+canvas {
+    border: 2px solid #ccc;
+    background-color: #fff;
+    margin-top: 10px;
+}
+// Affirmations
+const affirmations = [
+    "You are enough just as you are.",
+    "This moment is for you.",
+    "You are strong and resilient.",
+    "Let go of what you can't control.",
+    "Peace begins with a deep breath.",
+    "You deserve happiness and rest."
+];
+
+function newAffirmation() {
+    const index = Math.floor(Math.random() * affirmations.length);
+    document.getElementById("affirmation").innerText = affirmations[index];
+}
+
+// Sound player
+function playSound() {
+    const audio = document.getElementById("natureSound");
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.pause();
+    }
+}
+
+// Doodle canvas
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let painting = false;
+
+canvas.addEventListener("mousedown", () => painting = true);
+canvas.addEventListener("mouseup", () => painting = false);
+canvas.addEventListener("mousemove", draw);
+
+function draw(e) {
+    if (!painting) return;
+    ctx.fillStyle = "#4a90e2";
+    ctx.beginPath();
+    ctx.arc(e.offsetX, e.offsetY, 4, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Gratitude saver
+function saveGratitude() {
+    const text = document.getElementById("gratitude").value;
+    if (text.trim()) {
+        localStorage.setItem("joynest_gratitude", text);
+        document.getElementById("savedMessage").innerText = "Saved! Take a moment to reflect 🌟";
+    } else {
+        document.getElementById("savedMessage").innerText = "Please write something to save it.";
+    }
+}
